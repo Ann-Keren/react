@@ -1,6 +1,9 @@
 function Paciente(){
     return(
-        <h2> PACIENTE</h2>
+
+        <h2> PACIENTE.</h2>
+
+       
     )
 }
 
