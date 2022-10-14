@@ -10,18 +10,17 @@ import Paciente from "./componentes/paciente"
 
 
 function App() {
-  
-
-  return(
-    <>
+    return(
+    <div className="mt-20">
       <Header/>
-      <ListadoP/>
+      
       <Formulario/>
+      <ListadoP/>
       <Error/>
       <Paciente/>
 
-    </>
+    </div>
   )
 }
 
-export default App
+export default App;
