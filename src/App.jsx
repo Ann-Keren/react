@@ -2,23 +2,34 @@
 
 import Header from "./componentes/header"
 import ListadoP from "./componentes/listadoPaciente"
-
 import Formulario from "./componentes/formulario"
-import Error from "./componentes/error"
-import Paciente from "./componentes/paciente"
+import {useState} from "react"
 
 
 
 function App() {
-    return(
-    <div className="mt-20">
-      <Header/>
-      
-      <Formulario/>
-      <ListadoP/>
-      <Error/>
-      <Paciente/>
+  //areglo dinamico
+  const [pacientes, setPacientes]=useState([])
+  const [paciente, setPaciente]=useState({})
+   const eliminarPaciente=id =>{const pacientesActu=pacientes.filter(paciente=>paciente.id!==id)
+    setPacientes(pacientesActu)}
 
+    return(
+    <div className="mt-20 container mx-auto">
+      <Header/>
+      <div className="md:flex mt-12">
+      <Formulario
+      pacientes={pacientes}
+      setPacientes={setPacientes}
+      paciente={paciente}
+      setPaciente={setPaciente}
+      />
+      <ListadoP
+      pacientes={pacientes}
+      setPaciente={setPaciente}
+      eliminarPaciente={eliminarPaciente}
+      />
+      </div>
     </div>
   )
 }
