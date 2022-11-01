@@ -1,42 +1,62 @@
 import { useState, useEffect } from "react";
 import Error from "./error";
 
-function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
+function Formulario({ pacientes, setPacientes, paciente, setPaciente }) {
 
     const [mascota, setMascota] = useState('');
     const [propietario, setPropietario] = useState('');
     const [email, setEmail] = useState('');
     const [alta, setAlta] = useState('');
     const [sintomas, setSintomas] = useState('');
-    const [error, setError]= useState(false)
-    const generarId=()=>{
-        const random=Math.random().toString(36)
-        const fecha=Date.now().toString(36)
-        return random+fecha
+    const [error, setError] = useState(false)
+
+    useEffect(()=>{
+        if(Object.keys(paciente).length>0){
+            setMascota(paciente.mascota)
+            setPropietario(paciente.propietario)
+            setEmail(paciente.email)
+            setAlta(paciente.alta)
+            setSintomas(paciente.sintomas)
+        
+        }
+    },[paciente]
+    )
+
+    
+
+    const generarId = () => {
+        const random = Math.random().toString(36)
+        const fecha = Date.now().toString(36)
+        return random + fecha
 
     }
-    const validarFormulario=(e)=>{
+    const validarFormulario = (e) => {
         e.preventDefault()
-            if([mascota,propietario,email,alta,sintomas].includes('')){
-                console.log('hay al menos un campo vacio')
-                setError(true)
-                //cortar la funcion es lo q sirve el return
-                return
-            }
-        setError(false)
-        const objetoPaciente={mascota,propietario,email,sintomas,alta}
-        if(paciente.id){
-
-        }else{
-            objetoPaciente.id=generarId()
-            
-            setPacientes([...pacientes, objetoPaciente])
+        if ([mascota, propietario, email, alta, sintomas].includes('')) {
+            console.log('hay al menos un campo vacio')
+            setError(true)
+            //cortar la funcion es lo q sirve el return
+            return
         }
-       // console.log(objetoPaciente)
-        
+        setError(false)
+        const objetoPaciente = { mascota, propietario, email, sintomas, alta }
+        if (paciente.id) {
+            objetoPaciente.id = paciente.id
+            const pacientesActu = pacientes.map(pacienteState => pacienteState.id === paciente.id ? objetoPaciente:pacienteState)
+
+            setPacientes(pacientesActu)
+
+        } else {
+            objetoPaciente.id = generarId()
+
+            setPacientes([...pacientes, objetoPaciente])
+            setPaciente({})
+        }
+        // console.log(objetoPaciente)
 
 
-        //para reiniciar formulario
+
+        //--para reiniciar formulario
         setMascota('')
         setPropietario('')
         setEmail('')
@@ -55,8 +75,8 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                 <div>
                     {
                         //
-                    error&&<Error>                        <p>Todos los campos son obligatorios</p>
-                    </Error>
+                        error && <Error>                        <p>Todos los campos son obligatorios</p>
+                        </Error>
                     }
                     <div>
                         <label className="block text-gray-700 uppercase font-bold">Nombre Mascota</label>
@@ -64,7 +84,7 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                             type="text"
                             placeholder="nombre de la Mascota"
                             value={mascota}
-                            onChange={(e)=>setMascota(e.target.value)
+                            onChange={(e) => setMascota(e.target.value)
                             }
                         />
 
@@ -75,8 +95,8 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                             type="text"
                             placeholder="Nombre Propietario"
                             value={propietario}
-                            onChange={(e)=>setPropietario(e.target.value)
-                            } 
+                            onChange={(e) => setPropietario(e.target.value)
+                            }
                         />
 
                     </div>
@@ -86,7 +106,7 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                             type="email"
                             placeholder="Email"
                             value={email}
-                            onChange={(e)=>setEmail(e.target.value)
+                            onChange={(e) => setEmail(e.target.value)
                             }
                         />
 
@@ -97,7 +117,7 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                             type="date"
                             placeholder="Alta"
                             value={alta}
-                            onChange={(e)=>setAlta(e.target.value)
+                            onChange={(e) => setAlta(e.target.value)
                             }
                         />
 
@@ -108,12 +128,13 @@ function Formulario({pacientes,setPacientes,paciente, setPaciente}) {
                             type="text"
                             placeholder="Sintomas"
                             value={sintomas}
-                            onChange={(e)=>setSintomas(e.target.value)
+                            onChange={(e) => setSintomas(e.target.value)
                             }
                         />
 
                     </div>
-                    <input type="submit" className="bg-indigo-700 text-white uppercase w-full p-3 mt-5 rounded-md hover:bg-indigo-400 font-bold cursor-pointer transition-colors" value={'Agregar Paciente'} />
+                    <input type="submit" className="bg-indigo-700 text-white uppercase w-full p-3 mt-5 rounded-md hover:bg-indigo-400 font-bold cursor-pointer transition-colors" value={paciente.id ? 'editar paciente' : 'agregar paciente'}
+                    />
                 </div>
             </form>
         </div>
